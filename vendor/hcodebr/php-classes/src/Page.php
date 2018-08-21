@@ -14,13 +14,13 @@ class Page{
 
 	];
 
-	public function __construct($opts = array()){
+	public function __construct($opts = array(), $tpl_dir = "/views/"){
 
 		$this->options = array_merge($this->defaults, $opts); 	// o 2º param. sobreescreve o primeiro.. quero que o que a pessoa informe no construct sobreescreva o default.
 
 
 		$config = array(
-			"tpl_dir"       => $_SERVER["DOCUMENT_ROOT"]."/views/",
+			"tpl_dir"       => $_SERVER["DOCUMENT_ROOT"].$tpl_dir,
 			"cache_dir"     => $_SERVER["DOCUMENT_ROOT"]."/views-cache/",
 			"debug"         => false // set to false to improve the speed
 			);
