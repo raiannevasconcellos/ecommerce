@@ -4,11 +4,11 @@ namespace Hcode;
 
 use Rain\Tpl;
 
-class Mailer {
+class Mailer { 
 
 	const USERNAME = "cursodephp7@gmail.com";		// criei esse email e a senha [php7bolado]
 
-	const PASSWORD = "<?password?>";
+	const PASSWORD = "<?php7bolado?>";
 
 	const NAME_FROM = "Hcode Store";
 
@@ -28,7 +28,7 @@ class Mailer {
 		$tpl = new Tpl;
 
 		foreach ($data as $key => $value) {
-			$this->tpl->assign($key, $value);
+			$tpl->assign($key, $value);
 		}
 
 		$html = $tpl->draw($tplName, true);
