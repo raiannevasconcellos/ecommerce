@@ -4,7 +4,7 @@ namespace Hcode\Model;
 
 use \Hcode\DB\Sql;
 use \Hcode\Model;
-use \Hdoce\Mailer;
+use \Hcode\Mailer;
 
 class User extends Model{
 

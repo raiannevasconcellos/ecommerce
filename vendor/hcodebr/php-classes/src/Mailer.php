@@ -55,7 +55,7 @@ class Mailer {
 
 		$this->mail->setFrom(Mailer::USERNAME, Mailer::NAME_FROM);
 
-		$this->mail->addAdress($toAddress, $toName);
+		$this->mail->addAddress($toAddress, $toName);
 
 		$this->mail->Subject = $subject;
 
