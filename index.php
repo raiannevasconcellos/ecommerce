@@ -7,6 +7,7 @@ use \Slim\Slim;
 use \Hcode\Page;
 use \Hcode\PageAdmin;
 use \Hcode\Model\User;
+use \Hcode\Model\Category;
 
 $app = new Slim();
 
@@ -183,7 +184,7 @@ $app->get("/admin/forgot/sent", function(){
 
 });
 
-$app->get("/admin/forgot/reset", function(){		// pra quando o email ja estiver sendo enviado
+$app->get("/admin/forgot/reset", function(){		// pra quando o email ja estiver sendo enviado [não está funcionando o link de redefinir senha]
 
 	$user = User::validForgotDecrypt($_GET["code"]);
 
@@ -202,7 +203,7 @@ $app->get("/admin/forgot/reset", function(){		// pra quando o email ja estiver s
 
 });
 
-$app->post("/admin/forgot/reset", function(){
+$app->post("/admin/forgot/reset", function(){	// até aqui é a parte de redefinir senha, que nao está rodando
 
 	$forgot = User::validForgotDecrypt($_POST["code"]);
 
@@ -230,6 +231,99 @@ $app->post("/admin/forgot/reset", function(){
 
 });
 
+$app->get("/admin/categories", function(){
+
+	User::verifyLogin();
+
+	$categories = Category::listAll();
+
+	$page = new PageAdmin();
+
+	$page->setTpl("categories", [
+		'categories'=> $categories
+
+
+	]);
+
+});
+
+$app->get("/admin/categories/create", function(){
+
+	User::verifyLogin();
+
+	$page = new PageAdmin();
+
+	$page->setTpl("categories-create");
+
+}); 
+
+$app->post("/admin/categories/create", function(){
+
+	User::verifyLogin();
+
+	$category = new Category();
+
+	$category->setData($_POST);
+
+	$category->save();
+
+	header('Location: /admin/categories');
+	exit;
+
+}); 
+
+$app->get("/admin/categories/:idcategory/delete", function($idcategory){
+
+	User::verifyLogin();
+
+	$category = new Category();
+
+	$category->get((int)$idcategory);
+
+	$category->delete();
+
+	header('Location: /admin/categories');
+	exit;
+
+});
+
+$app->get("/admin/categories/:idcategory", function($idcategory){
+
+	User::verifyLogin();
+
+	$category = new Category();
+
+	$category->get((int)$idcategory);
+
+	$page = new PageAdmin();
+
+	$page->setTpl("categories-update", [
+		'category'=>$category->getValues()		//isso transforma em um array
+
+	]);
+
+});
+
+$app->post("/admin/categories/:idcategory", function($idcategory){
+
+	User::verifyLogin();
+
+	$category = new Category();
+
+	$category->get((int)$idcategory);
+
+	$category->setData($_POST);
+
+	$category->save();
+
+	header('Location: /admin/categories');
+	exit;
+	
+});
+
+
 $app->run();
 
  ?>
+
+
