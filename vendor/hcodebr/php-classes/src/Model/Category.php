@@ -101,6 +101,39 @@ class Category extends Model{
 		}
 	}
 
+	public function getProductsPage ($page = 1, $itemsPerPage = 3){
+
+		$start = ($page - 1)*$itemsPerPage;		/* aqui é o calculo pra saber quantos itens são retornados por página... porque começa do item 0 e aparecem 3 por vez na 1ª pagina ; 
+		então quando for pra página 2 -> (2-1) = 1 * 3 = 3
+			assim a pag 2 começará no item 3 e trará 3, o que está correto!
+
+		*/
+
+		$sql = new Sql();
+
+		$results = $sql->select("
+				SELECT SQL_CALC_FOUND_ROWS * 
+				FROM tb_products a
+				INNER JOIN tb_productscategories b ON a.idproduct = b.idproduct
+				INNER JOIN tb_categories c ON c.idcategory = b.idcategory
+				WHERE c.idcategory = :idcategory
+				LIMIT $start, $itemsPerPage;", [
+					'idcategory'=>$this->getidcategory()
+
+		]);
+
+		$resultsTotal = $sql->select("SELECT FOUND_ROWS() AS nrtotal;");
+
+		return [
+
+			'data'=>Product::checkList($results),
+			'total'=>(int)$resultsTotal[0]["nrtotal"],
+			'pages'=>ceil($resultsTotal[0]["nrtotal"] / $itemsPerPage)			
+					// ceil é uma fç do PHP que converte arredondando pra cima
+		];
+
+	}
+
 	public function addProduct(Product $product){
 
 		$sql = new Sql();
